@@ -19,6 +19,7 @@ jobs:
 
   deploy_to_dev:
     if: github.ref == 'refs/heads/main'
+    environment: development
     needs: [build]
     runs-on: ubuntu-latest
     steps:
@@ -28,6 +29,7 @@ jobs:
       run: echo "Deployed to dev"
   
   test_on_dev:
+    environment: development
     needs: [deploy_to_dev]
     runs-on: ubuntu-latest
     steps:
@@ -43,6 +45,7 @@ jobs:
       run: npm test
 
   deploy_to_production:
+    environment: production
     needs: [test_on_dev]
     runs-on: ubuntu-latest
     steps:
