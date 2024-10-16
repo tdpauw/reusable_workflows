@@ -10,7 +10,8 @@ jobs:
       uses: actions/checkout@4
     - name: Setup node
       uses: actions/setup-node@4
-      node-version-file: package.json
+      with:
+        node-version-file: package.json
     - name: Install dependencies
       run: npm ci
     - name: Tests
