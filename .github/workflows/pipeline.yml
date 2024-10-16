@@ -1,0 +1,17 @@
+name: pipeline
+on:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@4
+    - name: Setup node
+      uses: actions/setup-node@4
+      node-version-file: package.json
+    - name: Install dependencies
+      run: npm ci
+    - name: Tests
+      run: npm test
