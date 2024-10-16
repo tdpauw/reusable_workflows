@@ -16,3 +16,15 @@ jobs:
       run: npm ci
     - name: Tests
       run: npm test
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Setup node
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: package.json
+    - name: Audit
+      run: npm audit
