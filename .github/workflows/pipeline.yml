@@ -5,29 +5,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v4
-    - name: Setup node
-      uses: actions/setup-node@v4
-      with:
-        node-version-file: package.json
-    - name: Install dependencies
-      run: npm ci
-    - name: Tests
-      run: npm test
-
-  scan:
-    if: false
-    runs-on: ubuntu-latest
-    steps:
-    - name: Scan
-      run: echo "All good"
+    uses: ./build.yml
 
   deploy_to_dev:
     if: ${{ !failure() && !cancelled() && github.ref == 'refs/heads/main' }}
     environment: development
-    needs: [build, scan]
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
