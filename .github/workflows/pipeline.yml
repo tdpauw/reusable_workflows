@@ -5,7 +5,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    uses: ./build.yml
+    uses: ./.github/workflows/build.yml
 
   deploy_to_dev:
     if: ${{ !failure() && !cancelled() && github.ref == 'refs/heads/main' }}
