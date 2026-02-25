@@ -9,6 +9,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Debug info
+        run: |
+          echo "::notice::Repository: $GITHUB_REPOSITORY"
       - name: Setup node
         uses: actions/setup-node@v4
         with:
