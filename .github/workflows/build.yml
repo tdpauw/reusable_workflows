@@ -14,7 +14,8 @@ jobs:
           echo "::notice::Repository: $GITHUB_REPOSITORY"
       - name: Latest tag
         id: latest_tag
-        run: echo "::notice::Latest tag: $(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
+        run: |
+          echo "::notice::Latest tag: $(git describe --tags --abbrev=0)"
       - name: Setup node
         uses: actions/setup-node@v4
         with:
