@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-tags: true
       - name: Debug info
         run: |
           echo "::notice::Repository: $GITHUB_REPOSITORY"
