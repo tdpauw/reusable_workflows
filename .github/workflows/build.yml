@@ -17,7 +17,7 @@ jobs:
       - name: Latest tag
         id: latest_tag
         run: |
-          echo "::notice::Latest tag: $(git describe --tags --abbrev=0)"
+          echo "::notice::Latest tag: $(git describe --tags --always --abbrev=0)"
           echo "::notice::Latest tag: $(git describe --tags $(git rev-list --tags --max-count=1))"
       - name: Setup node
         uses: actions/setup-node@v4
