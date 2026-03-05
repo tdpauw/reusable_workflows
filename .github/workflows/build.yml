@@ -23,4 +23,4 @@ jobs:
         with:
           node-version-file: package.json
       - name: Build
-        uses: tdepauw/reusable_workflows/.github/actions/build@main
+        uses: tdpauw/reusable_workflows/.github/actions/build@main
