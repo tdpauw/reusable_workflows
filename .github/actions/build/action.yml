@@ -11,4 +11,4 @@ runs:
   - name: Build
     id: build
     shell: bash
-    run: make build version=${{ inputs.version }}
+    run: make build ${{ inputs.version != '' && 'version=' + inputs.version || '' }}
