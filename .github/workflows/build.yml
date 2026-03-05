@@ -35,3 +35,5 @@ jobs:
           node-version-file: package.json
       - name: Build
         uses: tdpauw/reusable_workflows/.github/actions/build@main
+        with:
+          version: ${{ steps.generate_version.outputs.version }}
