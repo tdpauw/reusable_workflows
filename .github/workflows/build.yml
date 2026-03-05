@@ -22,7 +22,5 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: package.json
-      - name: Install dependencies
-        run: npm ci
-      - name: Tests
-        run: npm test
+      - name: Build
+        uses: ./.github/actions/build@main

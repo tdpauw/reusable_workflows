@@ -1,0 +1,10 @@
+name: Build
+description: Runs make build to execute the project build lifecycle
+runs:
+  using: 'composite'
+  steps:
+
+  - name: Build
+    id: build
+    shell: bash
+    run: make build
