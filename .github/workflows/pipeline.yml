@@ -11,17 +11,22 @@ jobs:
     environment: development
     needs: [build]
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ needs }}
     steps:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Deploy
-      run: make deploy env=staging version=$(echo $GITHUB_SHA | cut -c1-7)
+      id: deploy
+      run: make deploy env=staging version=${{needs.build.outputs.version}}
   
   test_on_dev:
     if: ${{ !failure() && !cancelled() }}
     environment: development
     needs: [deploy_to_dev]
     runs-on: ubuntu-latest
+    outputs:
+      version: ${{ needs.deploy_to_dev.outputs.version }}
     steps:
     - name: Checkout
       uses: actions/checkout@v4
@@ -40,4 +45,4 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
     - name: Deploy
-      run: make deploy env=production version=$(echo $GITHUB_SHA | cut -c1-7)
+      run: make deploy env=production version=${{needs.test_on_dev.outputs.version}}

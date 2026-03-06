@@ -2,6 +2,10 @@ name: build
 
 on:
   workflow_call:
+    outputs:
+      version:
+        description: 'The generated version for the build'
+        value: ${{ steps.generate_version.outputs.version }}
 
 jobs:
   build:
