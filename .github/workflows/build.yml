@@ -46,8 +46,8 @@ jobs:
       - name: Build Lead Time
         shell: bash
         run: |
-
-          TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+          COMMIT_TS="${{ github.event.head_commit.timestamp }}"
+          END_TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
           echo "::notice::Commit timestamp  : $COMMIT_TS"
           echo "::notice::Build finish time : $END_TS"
