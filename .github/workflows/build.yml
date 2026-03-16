@@ -13,6 +13,12 @@ jobs:
     outputs:
       version: ${{ steps.generate_version.outputs.version }}
     steps:
+      - name: Timestamp
+        id: timestamp
+        run: |
+          START_TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
+          echo "::notice::Build started at $START_TS"
+          echo "start-ts=$START_TS" >> $GITHUB_OUTPUT
       - name: Checkout
         uses: actions/checkout@v6
         with:
@@ -46,14 +52,14 @@ jobs:
       - name: Build Lead Time
         shell: bash
         run: |
-          COMMIT_TS="${{ github.event.head_commit.timestamp }}"
+          START_TS="${{ steps.timestamp.outputs.start-ts }}"
           END_TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
-          echo "::notice::Commit timestamp  : $COMMIT_TS"
+          echo "::notice::Commit timestamp  : $START_TS"
           echo "::notice::Build finish time : $END_TS"
 
           # Convert timestamps to epoch seconds
-          commit_epoch=$(date -d "$COMMIT_TS" +"%s")
+          commit_epoch=$(date -d "$START_TS" +"%s")
           end_epoch=$(date -d "$END_TS" +"%s")
 
           lead_time=$((end_epoch - commit_epoch))
