@@ -13,12 +13,6 @@ jobs:
     outputs:
       version: ${{ steps.generate_version.outputs.version }}
     steps:
-      - name: Timestamp
-        id: timestamp
-        run: |
-          START_TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-          echo "::notice::Build started at $START_TS"
-          echo "start-ts=$START_TS" >> $GITHUB_OUTPUT
       - name: Checkout
         uses: actions/checkout@v6
         with:
@@ -52,7 +46,7 @@ jobs:
       - name: Build Lead Time
         shell: bash
         run: |
-          START_TS="${{ steps.timestamp.outputs.start-ts }}"
+          START_TS="$(git log -1 --format=%cI)"
           END_TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
           echo "::notice::Commit timestamp  : $START_TS"
