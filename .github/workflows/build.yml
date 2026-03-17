@@ -46,25 +46,27 @@ jobs:
       - name: Build Lead Time
         shell: bash
         run: |
-          START_TS="$(git log -1 --format=%cI)"
+          COMMIT=$(git log --pretty=format:"%h %s %an %ad" --date=relative)
+          COMMIT_TS="$(git log -1 --format=%cI)"
           END_TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
           echo "::notice::$(git log -1 --pretty=format:"%h %s %an %ad" --date=relative)"
-          echo "::notice::Commit timestamp  : $START_TS"
+          echo "::notice::Commit timestamp  : $COMMIT_TS"
           echo "::notice::Build finish time : $END_TS"
 
           # Convert timestamps to epoch seconds
-          commit_epoch=$(date -d "$START_TS" +"%s")
+          commit_epoch=$(date -d "$COMMIT_TS" +"%s")
           end_epoch=$(date -d "$END_TS" +"%s")
 
-          lead_time=$((end_epoch - commit_epoch))
-          echo "::notice::Build Lead time (seconds): $lead_time"
+          lead_time_in_seconds=$((end_epoch - commit_epoch))
+          echo "::notice::Build Lead time (seconds): $lead_time_in_seconds"
 
 
-          printf -v human "%02dh %02dm %02ds" \
-            $((lead_time/3600)) \
-            $(((lead_time%3600)/60)) \
-            $((lead_time%60))
-          echo "::notice::Build Lead time (human): $human"
+          printf -v lead_time_human "%02dh %02dm %02ds" \
+            $((lead_time_in_seconds/3600)) \
+            $(((lead_time_in_seconds%3600)/60)) \
+            $((lead_time_in_seconds%60))
+          echo "::notice::Build Lead time (human): $lead_time_human"
 
-          echo "Build Lead Time: $lead_time seconds ($human)" >> $GITHUB_STEP_SUMMARY
+          echo "Commit: $COMMIT" >> $GITHUB_STEP_SUMMARY
+          echo "Build Lead Time: $lead_time_in_seconds seconds ($lead_time_human)" >> $GITHUB_STEP_SUMMARY
