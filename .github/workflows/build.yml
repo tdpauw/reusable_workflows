@@ -49,8 +49,8 @@ jobs:
           COMMIT=$(git log --pretty=format:"%h %s %an %ad" --date=relative)
           COMMIT_TS="$(git log -1 --format=%cI)"
           END_TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
-
-          echo "::notice::Branch: $GITHUB_REF_NAME"
+          
+          echo "::notice::Branch: $GITHUB_REF"
           echo "::notice::$(git log -1 --pretty=format:"%h %s %an %ad" --date=relative)"
           echo "::notice::Commit timestamp  : $COMMIT_TS"
           echo "::notice::Build finish time : $END_TS"
