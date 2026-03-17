@@ -46,13 +46,14 @@ jobs:
       - name: Build Lead Time
         shell: bash
         run: |
+          BRANCH_NAME="${GITHUB_HEAD_REF:-${GITHUB_REF_NAME}}"
+          git checkout $BRANCH_NAME
           COMMIT=$(git log --pretty=format:"%h %s %an %ad" --date=relative)
           COMMIT_TS="$(git log -1 --format=%cI)"
           END_TS="$(date -u +"%Y-%m-%dT%H:%M:%SZ")"
 
-          echo "::notice::Branch: $GITHUB_REF_NAME"
-          git checkout $GITHUB_REF_NAME
-          echo "::notice::$(git log -1 --pretty=format:"%h %s %an %ad" --date=relative)"
+          echo "::notice::Branch: $BRANCH_NAME"
+          echo "::notice::$COMMIT"
           echo "::notice::Commit timestamp  : $COMMIT_TS"
           echo "::notice::Build finish time : $END_TS"
 
@@ -70,5 +71,5 @@ jobs:
             $((lead_time_in_seconds%60))
           echo "::notice::Build Lead time (human): $lead_time_human"
 
-          echo "Commit: $COMMIT" >> $GITHUB_STEP_SUMMARY
+          echo "$COMMIT" >> $GITHUB_STEP_SUMMARY
           echo "Build Lead Time: $lead_time_in_seconds seconds ($lead_time_human)" >> $GITHUB_STEP_SUMMARY
