@@ -37,10 +37,6 @@ jobs:
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "::notice::Generated version: $VERSION"
-      - name: Setup node
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: package.json
       - name: Pass secrets
         uses: oNaiPs/secrets-to-env-action@v1
         with:
