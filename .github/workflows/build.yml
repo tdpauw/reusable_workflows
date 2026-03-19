@@ -41,11 +41,10 @@ jobs:
         uses: oNaiPs/secrets-to-env-action@v1
         with:
           secrets: ${{ toJSON(secrets) }}
-          prefix: CICD_
       - name: Print secret
         shell: bash
         run: |
-          echo "Value of A_SECRET: $CICD_A_SECRET"
+          echo "Value of A_SECRET: $A_SECRET"
           echo "Value of A_VAR: $A_VAR"
           echo "${{ toJSON(env) }}"
           echo "${{ toJSON(secrets) }}"
