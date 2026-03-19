@@ -52,6 +52,7 @@ jobs:
           echo "Value of A_SECRET: $CICD_A_SECRET"
           echo "Value of A_VAR: $A_VAR"
           echo "${{ toJSON(env) }}"
+          echo "${{ toJSON(secrets) }}"
       - name: Build
         uses: tdpauw/reusable_workflows/.github/actions/build@main
         with:
