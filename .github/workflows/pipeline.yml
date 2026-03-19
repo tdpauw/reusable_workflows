@@ -5,6 +5,7 @@ on:
 jobs:
   build:
     uses: ./.github/workflows/build.yml
+    secrets: inherit
 
   deploy_to_dev:
     if: ${{ !failure() && !cancelled() && github.ref == 'refs/heads/main' }}
