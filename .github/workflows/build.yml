@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.generate_version.outputs.version }}
+    env:
+      A_VAR: A variable value
     steps:
       - name: Checkout
         uses: actions/checkout@v6
@@ -48,6 +50,8 @@ jobs:
         shell: bash
         run: |
           echo "Value of A_SECRET: $CICD_A_SECRET"
+          echo "Value of A_VAR: $A_VAR"
+          echo "${{ toJSON(env) }}"
       - name: Build
         uses: tdpauw/reusable_workflows/.github/actions/build@main
         with:
