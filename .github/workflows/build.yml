@@ -39,6 +39,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version-file: package.json
+      - name: Pass secrets
+        uses: oNaiPs/secrets-to-env-action@v1
+        with:
+          secrets: ${{ toJSON(secrets) }}
+          prefix: CICD_
+      - run: echo "Value of A_SECRET: $CICD_A_SECRET"
       - name: Build
         uses: tdpauw/reusable_workflows/.github/actions/build@main
         with:
