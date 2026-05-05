@@ -21,7 +21,7 @@ jobs:
       version: ${{ needs.build.outputs.version }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
     - name: Deploy
       id: deploy
       run: make deploy env=staging version=${{needs.build.outputs.version}}
@@ -35,7 +35,7 @@ jobs:
       version: ${{ needs.deploy_to_dev.outputs.version }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
     - name: Tests
       run: make test
 
@@ -46,6 +46,6 @@ jobs:
     if: ${{ inputs.final_environment != 'development' }}
     steps:
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
     - name: Deploy
       run: make deploy env=production version=${{needs.test_on_dev.outputs.version}}
