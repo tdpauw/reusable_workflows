@@ -4,6 +4,7 @@ on:
     inputs:
       final_environment:
         description: The final environment to deploy to (e.g., staging, production)
+        type: string
         default: production
 
 jobs:
