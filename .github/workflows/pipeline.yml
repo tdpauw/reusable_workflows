@@ -43,7 +43,7 @@ jobs:
     environment: production
     needs: [test_on_dev]
     runs-on: ubuntu-latest
-    if: ${{ inputs.final_environment != 'development' }}
+    if: ${{ inputs.final_environment != 'development' && !cancelled() }}
     steps:
     - name: Checkout
       uses: actions/checkout@v6
