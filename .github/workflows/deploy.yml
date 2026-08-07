@@ -12,10 +12,11 @@ on:
     outputs:
       version:
         description: The generated version for the build
-        value: ${{ jobs.build.outputs.version }}
+        value: ${{ jobs.deploy.outputs.version }}
 
 jobs:
-  build:
+  deploy:
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     outputs:
       version: ${{ inputs.version }}
