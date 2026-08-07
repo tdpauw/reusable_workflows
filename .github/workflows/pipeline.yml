@@ -33,7 +33,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v6
     - name: Tests
-      run: make test
+      run: make test version=${{ needs.deploy_to_staging.outputs.version }}
 
   deploy_to_production:
     if: ${{ inputs.final_environment != 'staging' && !failure() && !cancelled() }}
