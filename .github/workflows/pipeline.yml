@@ -12,22 +12,22 @@ jobs:
     uses: ./.github/workflows/build.yml
     secrets: inherit
 
-  deploy_to_dev:
+  deploy_to_staging:
     if: ${{ !failure() && !cancelled() && github.ref == 'refs/heads/main' }}
     needs: [build]
     uses: ./.github/workflows/deploy.yml
     with:
       version: ${{ needs.build.outputs.version }}
-      environment: development
+      environment: staging
     secrets: inherit
     
-  test_on_dev:
+  test_on_staging:
     if: ${{ !failure() && !cancelled() }}
-    environment: development
-    needs: [deploy_to_dev]
+    environment: staging
+    needs: [deploy_to_staging]
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ needs.deploy_to_dev.outputs.version }}
+      version: ${{ needs.deploy_to_staging.outputs.version }}
     steps:
     - name: Checkout
       uses: actions/checkout@v6
@@ -36,9 +36,9 @@ jobs:
 
   deploy_to_production:
     if: ${{ inputs.final_environment != 'development' && !failure() && !cancelled() }}
-    needs: [test_on_dev]
+    needs: [test_on_staging]
     uses: ./.github/workflows/deploy.yml
     with:
-      version: ${{ needs.test_on_dev.outputs.version }}
+      version: ${{ needs.test_on_staging.outputs.version }}
       environment: production
     secrets: inherit
