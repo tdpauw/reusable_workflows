@@ -1,0 +1,29 @@
+name: deploy
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: The version to deploy
+        type: string
+      environment:
+        description: The environment to deploy to (e.g., staging, production)
+        type: string
+    outputs:
+      version:
+        description: The generated version for the build
+        value: ${{ jobs.build.outputs.version }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ inputs.version }}
+    env:
+      A_VAR: A variable value
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+    - name: Deploy
+      id: deploy
+      run: make deploy env=${{inputs.environment}} version=${{inputs.version}}

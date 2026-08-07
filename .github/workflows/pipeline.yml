@@ -16,16 +16,12 @@ jobs:
     if: ${{ !failure() && !cancelled() && github.ref == 'refs/heads/main' }}
     environment: development
     needs: [build]
-    runs-on: ubuntu-latest
-    outputs:
+    uses: ./.github/workflows/deploy.yml
+    with:
       version: ${{ needs.build.outputs.version }}
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v6
-    - name: Deploy
-      id: deploy
-      run: make deploy env=staging version=${{needs.build.outputs.version}}
-  
+      environment: development
+    secrets: inherit
+    
   test_on_dev:
     if: ${{ !failure() && !cancelled() }}
     environment: development
@@ -40,12 +36,11 @@ jobs:
       run: make test
 
   deploy_to_production:
+    if: ${{ inputs.final_environment != 'development' && !failure() && !cancelled() }}
     environment: production
     needs: [test_on_dev]
-    runs-on: ubuntu-latest
-    if: ${{ inputs.final_environment != 'development' && !failure() && !cancelled() }}
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v6
-    - name: Deploy
-      run: make deploy env=production version=${{needs.test_on_dev.outputs.version}}
+    uses: ./.github/workflows/deploy.yml
+    with:
+      version: ${{ needs.test_on_dev.outputs.version }}
+      environment: production
+    secrets: inherit
