@@ -13,6 +13,7 @@ jobs:
     secrets: inherit
 
   deploy_to_staging:
+    name: Deploy to Staging
     if: ${{ !failure() && !cancelled() && github.ref == 'refs/heads/main' }}
     needs: [build]
     uses: ./.github/workflows/deploy.yml
@@ -22,6 +23,7 @@ jobs:
     secrets: inherit
     
   test_on_staging:
+    name: Test on Staging
     if: ${{ !failure() && !cancelled() }}
     environment: staging
     needs: [deploy_to_staging]
@@ -35,7 +37,8 @@ jobs:
       run: make test
 
   deploy_to_production:
-    if: ${{ inputs.final_environment != 'development' && !failure() && !cancelled() }}
+    name: Deploy to Production
+    if: ${{ inputs.final_environment != 'staging' && !failure() && !cancelled() }}
     needs: [test_on_staging]
     uses: ./.github/workflows/deploy.yml
     with:
