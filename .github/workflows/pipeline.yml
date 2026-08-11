@@ -6,6 +6,10 @@ on:
         description: The final environment to deploy to (e.g., staging, production)
         type: string
         default: production
+      skip_acceptance_tests:
+        description: Whether to skip the acceptance tests stage
+        type: boolean
+        default: false
 
 jobs:
   build:
@@ -22,21 +26,17 @@ jobs:
     secrets: inherit
     
   test_on_staging:
-    name: Test on Staging
-    if: ${{ !failure() && !cancelled() }}
-    environment: staging
+    if: ${{ !failure() && !cancelled() && github.ref == 'refs/heads/main' && inputs.final_environment != 'staging'}}
     needs: [deploy_to_staging]
-    runs-on: ubuntu-latest
-    outputs:
+    uses: ./.github/workflows/acceptance_tests.yml
+    with:
       version: ${{ needs.deploy_to_staging.outputs.version }}
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v6
-    - name: Tests
-      run: make test version=${{ needs.deploy_to_staging.outputs.version }}
+      environment: staging
+      skip_stage: ${{ inputs.skip_acceptance_tests }}
+    secrets: inherit
 
   deploy_to_production:
-    if: ${{ inputs.final_environment != 'staging' && !failure() && !cancelled() }}
+    if: ${{ !failure() && !cancelled() && inputs.final_environment != 'staging' }}
     needs: [test_on_staging]
     uses: ./.github/workflows/deploy.yml
     with:

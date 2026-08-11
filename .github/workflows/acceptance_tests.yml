@@ -1,0 +1,33 @@
+name: acceptance tests
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: The version to deploy
+        type: string
+      environment:
+        description: The environment to deploy to (e.g., staging, production)
+        type: string
+      skip_stage:
+        description: Whether to skip this stage
+        type: boolean
+        default: false
+    outputs:
+      version:
+        description: The generated version for the build
+        value: ${{ jobs.deploy.outputs.version }}
+
+jobs:
+  acceptance-tests:
+    name: Test on Staging
+    if: ${{ inputs.skip_stage != true }}
+    environment: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ inputs.version }}
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v6
+    - name: Tests
+      run: make test version=${{ inputs.version }}
